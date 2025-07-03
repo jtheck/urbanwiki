@@ -1,13 +1,10 @@
-
-
-
 require('dotenv').config();
 
 const express = require('express');
-const mysql = require('mysql');
+// const mysql = require('mysql');
 const app = express();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 
 app.use(express.static('public'));
@@ -20,24 +17,24 @@ app.listen(port, () => {console.log('UrbanWiki listening on port '+ port +'!')})
 
 
 
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "node_user",
-  password: "pass"
-});
+// var con = mysql.createConnection({
+//   host: "localhost",
+//   user: "node_user",
+//   password: "pass"
+// });
 
 
 process.on('uncaughtException', function (err) {
   console.log(err);
 }); 
-con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-  con.query("CREATE DATABASE mydb2", function (err, result) {
-    if (err) throw err;
-    console.log("Database created");
-  });
-});
+// con.connect(function(err) {
+//   if (err) throw err;
+//   console.log("Connected!");
+//   con.query("CREATE DATABASE mydb2", function (err, result) {
+//     if (err) throw err;
+//     console.log("Database created");
+//   });
+// });
 
 
 

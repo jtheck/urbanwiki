@@ -1,6 +1,60 @@
-
-
-
 body {
   background-color: antiquewhite;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+html {
+  overflow: hidden;
+}
+
+#header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 15px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 80px;
+  box-sizing: border-box;
+}
+
+#header h1 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 24px;
+}
+
+#header h3 {
+  margin: 0 0 10px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+#header img {
+  max-height: 120px;
+  width: auto;
+}
+
+#map-container {
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#map {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+  border: none;
+  display: block;
 }
