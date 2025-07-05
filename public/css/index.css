@@ -4,6 +4,7 @@ body {
   padding: 0;
   font-family: Arial, sans-serif;
   overflow: hidden;
+  transition: background-color 0.8s ease-out;
 }
 
 html {
@@ -23,6 +24,7 @@ html {
   height: 40px;
   box-sizing: border-box;
   user-select: none;
+  transition: background-color 0.8s ease-out;
 }
 
 #header h1 {

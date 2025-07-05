@@ -38,6 +38,9 @@ class WorldMap {
       }
     };
     
+    // Initialize sky colors utility
+    this.skyColors = new SkyColors();
+    
     // Load SVG
     this.loadSVGLayers();
 
@@ -490,6 +493,45 @@ class WorldMap {
     const offsetX = this.state.offsetX % scaledGlobeWidth;
     const numCopies = Math.ceil(this.width / scaledGlobeWidth) + 2;
 
+    // Calculate timezone based on center of screen and apply smooth sky colors
+    // Use a more stable calculation that doesn't get affected by zoom scale
+    const centerScreenX = this.width / 2;
+    const centerWorldX = (centerScreenX - this.state.offsetX) / (scaleToFitHeight * this.state.scale);
+    let centerLongitude = (centerWorldX / this.globeImage.width) * 360 - 180; // Convert to -180 to +180
+    
+    // Handle longitude wrapping at the International Date Line
+    while (centerLongitude > 180) {
+      centerLongitude -= 360;
+    }
+    while (centerLongitude < -180) {
+      centerLongitude += 360;
+    }
+    
+    // Only update sky colors if the longitude change is significant (prevents jumping during zoom)
+    const now = Date.now();
+    const timeSinceLastUpdate = now - (this.lastColorUpdateTime || 0);
+    
+    // Handle wrapping when calculating longitude difference
+    let longitudeDiff = 0;
+    if (this.lastLongitude !== undefined) {
+      longitudeDiff = Math.abs(centerLongitude - this.lastLongitude);
+      // Handle wrapping case (e.g., from 179° to -179°)
+      if (longitudeDiff > 180) {
+        longitudeDiff = 360 - longitudeDiff;
+      }
+    }
+    
+    if (!this.lastLongitude || 
+        longitudeDiff > 0.5 ||
+        timeSinceLastUpdate > 2000) { // Force update every 2 seconds
+      // Get smooth sky colors using the utility with easing
+      const skyColors = this.skyColors.getSmoothSkyColors(centerLongitude, this.lastSkyColors);
+      this.skyColors.applyColors(skyColors);
+      this.lastSkyColors = skyColors;
+      this.lastLongitude = centerLongitude;
+      this.lastColorUpdateTime = now;
+    }
+
     // Pre-compute terrain dots array and mapping for better performance
     const allDots = [...(this.spaceDots || []), ...(this.oceanDots || []), ...(this.iceDots || []), ...(this.desertDots || []), ...(this.mountainDots || []), ...(this.forestDots || []), ...(this.cityDots || [])];
     const terrainTypeMap = {
@@ -570,6 +612,7 @@ class WorldMap {
 
   // Main render
   redraw() {
+    // Clear with transparency instead of white
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.drawMap();
   }
@@ -689,6 +732,9 @@ class WorldMap {
       this.handleHorizontalWrapping();
 
       this.redraw();
+      
+      // Reset sky colors debouncing after zoom operation
+      this.skyColors.resetDebounce();
     };
 
     document.addEventListener("wheel", this.handleWheel, { passive: false });
