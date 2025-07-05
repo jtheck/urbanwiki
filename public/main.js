@@ -10,4 +10,27 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', () => {
     worldMap.resize();
   });
+  
+  // Prevent map drag events when clicking on header
+  const header = document.getElementById("header");
+  const headerH3 = header.querySelector("h3");
+  
+  header.addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+  });
+  
+  header.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+  
+  // Specifically prevent events on the h3 element
+  headerH3.addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
+  
+  headerH3.addEventListener('click', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
 }); 

@@ -20,8 +20,9 @@ html {
   text-align: center;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 80px;
+  height: 40px;
   box-sizing: border-box;
+  user-select: none;
 }
 
 #header h1 {
@@ -34,11 +35,20 @@ html {
   margin: 0 0 10px 0;
   color: #666;
   font-size: 14px;
+  user-select: none;
+  pointer-events: none;
 }
 
 #header img {
   max-height: 120px;
   width: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
 }
 
 #map-container {
